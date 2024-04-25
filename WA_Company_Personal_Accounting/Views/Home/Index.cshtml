@@ -1,0 +1,88 @@
+﻿@model DBSetViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+    <div>
+        <h3> Company List </h3>
+        <a asp-controller="Company" asp-action="Edit" asp-route-id ="">Add new Company</a>
+    </div>
+        <div>
+            @foreach (Company entity in Model.Companies)
+            {
+                <div>
+                    <a asp-controller="Company" asp-action="Edit" asp-route-id="@entity.Id">Редактировать</a>
+
+                    <form style="display: inline-block;" id="form-@entity.Id" asp-controller="Company" asp-action="Delete" method="post">
+                        <input type="hidden" name="id" value="@entity.Id">
+                        <a href="#" onclick="document.getElementById('form-@entity.Id').submit();">удалить</a>
+                    </form>
+                    
+                    <p3>
+                        @($"{entity.Name}")  @($"{entity.INN}")
+                    <p3>
+                </div>
+            }
+        </div>
+
+    <div class="row">
+        <div class="panel-primary">
+            @using (Html.BeginForm("ExportCompanyToCSV", "Home", FormMethod.Post))
+            {
+                <button type="submit" class="btn btn-success">
+                    <i class="glyphicon glyphicon glyphicon-download"></i> Download CSV
+                </button>
+            }
+        </div>
+    </div>
+    <div class="col-md-12">
+        <form asp-controller="Home" asp-action="ImportCompanyCSV" method="post" enctype="multipart/form-data">
+            <input type="file" name="attachmentcsv" id="attachmentcsv" />
+            <input type="submit" value="Сохранить" />
+         </form>
+    </div>
+</div>
+
+
+<div>
+    <div>
+        <h3> Employee List </h3>
+        <a asp-controller="Employee" asp-action="Edit" asp-route-id="">Add new Employee</a>
+    </div>
+        <div>
+            @foreach (Employee entity in Model.Employees)
+            {
+                <div>
+                    <a asp-controller="Employee" asp-action="Edit" asp-route-id="@entity.Id">Редактировать</a>
+
+                    <form style="display: inline-block;" id="form-@entity.Id" asp-controller="Employee" asp-action="Delete" method="post">
+                        <input type="hidden" name="id" value="@entity.Id">
+                        <a href="#" onclick="document.getElementById('form-@entity.Id').submit();">удалить</a>
+                    </form>
+
+                    <a asp-area="" asp-controller="Company" asp-action="Index" asp-route-id="@entity.Id">
+                        @($"{entity.Name}") @($"{entity.Surname}") @($"{entity.Patronymic}")
+                    </a>
+                </div>
+            }
+        </div>
+
+    <div class="row">
+        <div class="panel-primary">
+            @using (Html.BeginForm("ExportEmployeeToCSV", "Home", FormMethod.Post)) 
+            {
+                <button type="submit" class="btn btn-success">
+                    <i class="glyphicon glyphicon glyphicon-download"></i> Download CSV
+                </button>
+            }
+        </div>
+
+        <div class="col-md-12">
+            <form asp-controller="Home" asp-action="ImportEmployeeCSV" method="post" enctype="multipart/form-data">
+                <input type="file" name="attachmentcsv" id="attachmentcsv" />
+                <input type="submit" value="Сохранить" />
+            </form>
+        </div>
+    </div>
+</div>
